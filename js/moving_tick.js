@@ -1,0 +1,96 @@
+
+//
+// Customizing Axes
+// Code from the medium post: https://medium.com/@ghenshaw.work/customizing-axes-in-d3-js-99d58863738b
+//
+
+// Margin convention
+const margin = {top: 20, right: 20, bottom: 20, left: 10};
+const width = 1200 - margin.left - margin.right,
+      height = 600 - margin.top - margin.bottom;
+
+
+// TODO: Learn more about this.
+const svg = d3.select("body").append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+              .attr("transform", `translate(${margin.left},${margin.top})`);
+
+
+// Define the scale for our axis.
+//const min_data = 0, max_data = 10000;
+const min_data = 0, max_data = 59;
+let xScale = d3.scaleLinear()
+               .domain([min_data, max_data])
+               .range([0, width]);
+
+// NOTE: axisBottom() doesn't place the axis at the bottom of a graph.
+// It creates an axis where _tick marks_ are on the bottom.
+let xAxisGenerator = d3.axisBottom(xScale);
+
+// Customizations using the axis generator; these are done pre-render.
+//xAxisGenerator.ticks(3);
+xAxisGenerator.ticks(max_data);
+
+
+// Render the axis.
+let xAxis = svg.append("g")
+              .call(xAxisGenerator);
+
+// Customizations using the axis after it is called
+// Place the axis at the bottom of the graph.
+xAxis.attr("transform",`translate(${0},${height})`);
+
+// Refresh it
+function refreshTicks() {
+  let interval = 1000;
+  setTimeout('updateTick();', interval);
+}
+
+// Restore all ticks to their original styling.
+function restoreTicks() {
+  d3.selectAll("text")
+  .attr("font-size", "10")
+  .attr("fill", "black");
+}
+
+function getSeconds() {
+  let today = new Date();
+  return today.getSeconds();
+}
+// Select a tick where the text is a specific value.
+// We can use this to  modify the tick whose text value matches the seconds!
+function updateTick() {
+  restoreTicks();
+  let seconds = getSeconds();
+  d3.selectAll("text")
+    .filter(function(){
+      return d3.select(this).text() == seconds;
+    })
+  	.attr("font-size", "15")
+    .attr("fill", "red");
+  refreshTicks();
+}
+
+function refresh_time() {
+    var interval = 1000; // Milliseconds.
+    setTimeout('display_time()', interval)
+}
+
+function prefix_zero(num) {
+    return num < 10 ? `0${num}` : num;
+}
+
+function display_time() {
+    var today    = new Date();
+    var hour     = prefix_zero(today.getHours());
+    var minute   = prefix_zero(today.getMinutes());
+    var second   = prefix_zero(today.getSeconds());
+    var the_time = `${hour}:${minute}:${second}`;
+    document.getElementById('the_clock').innerHTML = the_time;
+    updateTick();
+    refresh_time();
+}
+
+display_time();
