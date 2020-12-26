@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Clock PoC</title>
+        <style>
+        body {background-color: powderblue;}
+        /* https://css-tricks.com/centering-css-complete-guide/ */
+        /* Use Flexbox */
+        /*
+        .clock {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        */
+        /* Use Flexbox */
+        /* Use Grid */
+		body, html {
+		  height: 100%;
+		  display: grid;
+		}
+		.clock {
+		  margin: auto;
+		}
+        /* Use Grid */
+        #the_clock {
+            font-size: 100px;
+            font-family: monospace;
+        }
+        </style>
+        <script type="text/javascript">
+            // Calls display_time() every interval.
+            function refresh_time() {
+                var interval = 1000; // Milliseconds.
+                setTimeout('display_time()', interval)
+            }
+
+            function prefix_zero(num) {
+                return num < 10 ? `0${num}` : num;
+            }
+
+            function display_time() {
+                var today    = new Date();
+                var hour     = prefix_zero(today.getHours());
+                var minute   = prefix_zero(today.getMinutes());
+                var second   = prefix_zero(today.getSeconds());
+                var the_time = `${hour}:${minute}:${second}`;
+                document.getElementById('the_clock').innerHTML = the_time;
+                refresh_time();
+            }
+        </script>
+    </head>
+    <!--
+    Could also use "setInterval(display_time, 1000);" here.
+    We'd not need the refresh_time() function any longer.
+    -->
+    <body onload="display_time();">
+        <div class='clock'>
+            <span id='the_clock'></span>
+        </div>
+    </body>
+</html>
