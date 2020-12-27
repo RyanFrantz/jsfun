@@ -53,6 +53,10 @@ function restoreTicks() {
   d3.selectAll("text")
   .attr("font-size", "10")
   .attr("fill", "black");
+
+  d3.selectAll("line")
+  .attr("stroke", "black")
+  .attr("y2", "6");
 }
 
 function getSeconds() {
@@ -64,12 +68,20 @@ function getSeconds() {
 function updateTick() {
   restoreTicks();
   let seconds = getSeconds();
-  d3.selectAll("text")
-    .filter(function(){
-      return d3.select(this).text() == seconds;
+
+  // Select all tick elements, filtering on the one that matches the seconds
+  // value. Then, style it.
+  let tick = d3.selectAll("g.tick")
+    .filter(function() {
+      return d3.select(this.lastChild).text() == seconds;
     })
-  	.attr("font-size", "15")
-    .attr("fill", "red");
+
+  // We expect only 2 children: 'line' and 'text'.
+  let _line = d3.select(tick.nodes()[0].firstChild);
+  let _text = d3.select(tick.nodes()[0].lastChild);
+  _text.attr("font-size", "15").attr("fill", "red");
+  _line.attr("y2", "-100").attr("stroke", "red");
+
   refreshTicks();
 }
 
