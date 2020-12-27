@@ -52,10 +52,11 @@ function refreshTicks() {
 function restoreTicks() {
   d3.selectAll("text")
   .attr("font-size", "10")
-  .attr("fill", "black");
+  .attr("fill", "currentColor");
 
   d3.selectAll("line")
-  .attr("stroke", "black")
+  .attr("stroke", "currentColor")
+  .attr("stroke-width", "1")
   .attr("y2", "6");
 }
 
@@ -80,7 +81,9 @@ function updateTick() {
   let _line = d3.select(tick.nodes()[0].firstChild);
   let _text = d3.select(tick.nodes()[0].lastChild);
   _text.attr("font-size", "15").attr("fill", "red");
-  _line.attr("y2", "-100").attr("stroke", "red");
+  _line.attr("y2", "-100")
+    .attr("stroke", "red")
+    .attr("stroke-width", "3");
 
   refreshTicks();
 }
