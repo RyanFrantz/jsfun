@@ -109,11 +109,14 @@ function display_time() {
 }
 
 // Display a tick's text value as a tooltip.
-function tickOnMouseEnter(datum) {
-  console.log(datum);
-  // Is there a more D3 way to do this?
-  let value = datum.toElement.textContent;
-  tooltip.style("opacity", 1).text(value);
+// Receives a MouseEvent.
+function tickOnMouseEnter(_event) {
+  //console.log(_event);
+  //let value = _event.toElement.textContent;
+
+  // In this context 'this' is the text element.
+  let _text = d3.select(this);
+  tooltip.style("opacity", 1).text(_text.text());
 }
 
 // Select our tooltip element, for use later.
