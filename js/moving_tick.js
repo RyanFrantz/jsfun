@@ -119,11 +119,18 @@ function tickOnMouseEnter(_event) {
   tooltip.style("opacity", 1).text(_text.text());
 }
 
+// Make the tooltip go away.
+function tickOnMouseLeave(_event) {
+  tooltip.style("opacity", 0)
+}
+
 // Select our tooltip element, for use later.
 const tooltip = d3.select("#tooltip");
 
 // Select all tick text elements and bind events to them.
 const tickLines = d3.selectAll("text");
-tickLines.on("mouseenter", tickOnMouseEnter);
+tickLines
+  .on("mouseenter", tickOnMouseEnter)
+  .on("mouseleave", tickOnMouseLeave);
 
 display_time();
