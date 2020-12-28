@@ -8,10 +8,17 @@
             display: flex;
             justify-content: center;
         }
+        #tooltip {
+            padding: 2px;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 5px;
+        }
         </style>
     </head>
     <body onload='display_time();'>
         <script src="js/d3.v6.min.js"></script>
+        <div id="tooltip"></div>
         <div class="clock">
             <span id="the_clock"></span>
         </div>
