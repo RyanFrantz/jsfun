@@ -113,10 +113,15 @@ function display_time() {
 function tickOnMouseEnter(_event) {
   //console.log(_event);
   //let value = _event.toElement.textContent;
+  // NOTE: I think _event.pageX and _event.pageY would provide coords for the event.
 
   // In this context 'this' is the text element.
   let _text = d3.select(this);
   tooltip.style("opacity", 1).text(_text.text());
+  // TODO: These are null. I think we need the 'tick' element to get position, not the 'text' child here.
+  // See https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html#template for examples
+  tooltip.style("top", _text.attr("cy") + "px");
+  tooltip.style("left", _text.attr("cx") + "px");
 }
 
 // Make the tooltip go away.
