@@ -50,6 +50,7 @@ async function drawLineChart() {
   // Create a linear scale to convert temperatures into pixels/location
   // on the y axis.
   const yScale = d3.scaleLinear()
+    // The domain is our set of input values to map to the scale.
     .domain(d3.extent(dataset, yAccessor))
     // The range is the highest and lowest number we want our scale to output.
     .range([dimensions.boundedHeight, 0]);
@@ -101,7 +102,21 @@ async function drawLineChart() {
   // Same as above but doesn't "break up chained methods".
   // TODO: Understand this more.
   const yAxis = bounds.append("g")
-    .call(yAxisGenerator)
+    .call(yAxisGenerator);
+
+  // Create the x-axis in the same way.
+  // 'axisBottom' refers to the placement of the ticks (bottom of the axis),
+  // not the placement of the axis itself.
+  const xAxisGenerator = d3.axisBottom()
+    .scale(xScale);
+
+  console.log(dimensions.boundedHeight);
+  const xAxis = bounds.append("g")
+    .call(xAxisGenerator)
+      // The origin for the graph (0,0) is in the upper left-hand corner.
+      // Specifying translateY with a positive value (max of the bounded height)
+      // pushes the axis _down_.
+      .style("transform", `translateY(${dimensions.boundedHeight}px`);
 }
 
 drawLineChart();
