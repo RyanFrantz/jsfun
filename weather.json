@@ -1,0 +1,38 @@
+[
+  {
+    "date": "2020-12-28",
+    "temperature": "27"
+  },
+  {
+    "date": "2020-12-29",
+    "temperature": "33"
+  },
+  {
+    "date": "2020-12-30",
+    "temperature": "30"
+  },
+  {
+    "date": "2020-12-31",
+    "temperature": "37"
+  },
+  {
+    "date": "2021-01-01",
+    "temperature": "23"
+  },
+  {
+    "date": "2021-01-02",
+    "temperature": "32"
+  },
+  {
+    "date": "2021-01-03",
+    "temperature": "45"
+  },
+  {
+    "date": "2021-01-04",
+    "temperature": "17"
+  },
+  {
+    "date": "2021-01-05",
+    "temperature": "35"
+  }
+]
