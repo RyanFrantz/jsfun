@@ -66,6 +66,7 @@ function getSeconds() {
 }
 // Select a tick where the text is a specific value.
 // We can use this to  modify the tick whose text value matches the seconds!
+// TODO: Rename function to clarify it updates the tick whose second is displayed.
 function updateTick() {
   restoreTicks();
   let seconds = getSeconds();
@@ -75,7 +76,7 @@ function updateTick() {
   let tick = d3.selectAll("g.tick")
     .filter(function() {
       return d3.select(this.lastChild).text() == seconds;
-    })
+    });
 
   // We expect only 2 children: 'line' and 'text'.
   let _line = d3.select(tick.nodes()[0].firstChild);
@@ -88,15 +89,17 @@ function updateTick() {
   refreshTicks();
 }
 
+function prefix_zero(num) {
+    return num < 10 ? `0${num}` : num;
+}
+
+// This is one half of a main loop between this function and display_time().
 function refresh_time() {
     var interval = 1000; // Milliseconds.
     setTimeout('display_time()', interval)
 }
 
-function prefix_zero(num) {
-    return num < 10 ? `0${num}` : num;
-}
-
+// Entry point for our program.
 function display_time() {
     var today    = new Date();
     var hour     = prefix_zero(today.getHours());
@@ -110,18 +113,28 @@ function display_time() {
 
 // Display a tick's text value as a tooltip.
 // Receives a MouseEvent.
-function tickOnMouseEnter(_event) {
+function tickOnMouseEnter(_event, datum) {
   //console.log(_event);
+  // datum should be the same as the tick node's text.
+  console.log(`Tick value: ${datum}`);
+  let [x, y] = d3.pointer(_event);
+  console.log(JSON.stringify(_event.currentTarget));
+  console.log(`x: ${x} y: ${y}`);
   //let value = _event.toElement.textContent;
   // NOTE: I think _event.pageX and _event.pageY would provide coords for the event.
 
   // In this context 'this' is the text element.
-  let _text = d3.select(this);
-  tooltip.style("opacity", 1).text(_text.text());
+  // Because HTML elements that receive events have `this` bound to them?
+  // Yes. `this` refers to the HTML node that received an event.
+  let _node = d3.select(this);
+  console.log(_node);
+  console.log(_node.text());
+  console.log(_node.attr("transform").translate);
+  tooltip.style("opacity", 1).text(_node.text());
   // TODO: These are null. I think we need the 'tick' element to get position, not the 'text' child here.
   // See https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html#template for examples
-  tooltip.style("top", _text.attr("cy") + "px");
-  tooltip.style("left", _text.attr("cx") + "px");
+  tooltip.style("top", _node.attr("cy") + "px");
+  tooltip.style("left", _node.attr("cx") + "px");
 }
 
 // Make the tooltip go away.
@@ -133,9 +146,13 @@ function tickOnMouseLeave(_event) {
 const tooltip = d3.select("#tooltip");
 
 // Select all tick text elements and bind events to them.
-const tickLines = d3.selectAll("text");
+//const tickLines = d3.selectAll("text");
+const tickLines = d3.selectAll(".tick");
 tickLines
   .on("mouseenter", tickOnMouseEnter)
   .on("mouseleave", tickOnMouseLeave);
 
+// With `<body onload='display_time();'>` we don't need this call.
+// Without that onload tag, this call will be made when the JS file is
+// loaded. Having both seems harmless.
 display_time();
